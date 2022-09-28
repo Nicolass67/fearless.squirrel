@@ -51,8 +51,20 @@ function bullet_collision()
             player1.bullets.splice(i, 1);
             i--;
         }
-    }
 
+        // If the player's bullet touch the ennemy, the ennemy disapear
+        if(Math.abs(player1.bullets[i].position.x) > Math.abs(ennemy1.position.x)-10 &&
+            Math.abs(player1.bullets[i].position.x) < Math.abs(ennemy1.position.x+10) &&
+            Math.abs(player1.bullets[i].position.y) > Math.abs(ennemy1.position.y) -10 &&
+            Math.abs(player1.bullets[i].position.y) < Math.abs(ennemy1.position.y+10)
+            )
+            {
+                scene.remove(player1.bullets[i]);
+                player1.bullets.splice(i, 1);
+                i--;
+                scene.remove(ennemy1.graphic);
+            }
+    }
 }
 
 function player_collision()
@@ -63,10 +75,31 @@ function player_collision()
 
     if ( x > WIDTH )
         player1.graphic.position.x -= x - WIDTH;
+    if ( x < 0 )
+        player1.graphic.position.x -= x;
     if ( y < 0 )
         player1.graphic.position.y -= y;
     if ( y > HEIGHT )
         player1.graphic.position.y -= y - HEIGHT;
+
+    // Check if the player is touching the ennemy
+    if(Math.abs(player1.position.x) > Math.abs(ennemy1.position.x)-10 &&
+            Math.abs(player1.position.x) < Math.abs(ennemy1.position.x+10) &&
+            Math.abs(player1.position.y) > Math.abs(ennemy1.position.y) -10 &&
+            Math.abs(player1.position.y) < Math.abs(ennemy1.position.y+10))
+            {
+                if (player1.IsTouchingEnnemy == false)
+                {
+                    player1.life -=1;
+                    player1.IsTouchingEnnemy = true;
+                }
+                
+            }
+    else
+    {
+
+                player1.IsTouchingEnnemy = false;
+    }
 
 }
 
@@ -75,25 +108,41 @@ function player_falling()
     var nb_tile = 10;
     var sizeOfTileX = WIDTH / nb_tile;
     var sizeOfTileY = HEIGHT / nb_tile;
-    var x = player1.graphic.position.x | 0;
-    var y = player1.graphic.position.y | 0;
+    var x = player1.position.x | 0;
+    var y = player1.position.y | 0;
     var length = noGround.length;
-    var element = null;
+    var element;
+    var tileX;
+    var tileY;
+    var mtileX;
+    var mtileY;
 
     for (var i = 0; i < length; i++) {
         element = noGround[i];
 
-        var tileX = (element[0]) | 0;
-        var tileY = (element[1]) | 0;
-        var mtileX = (element[0] + sizeOfTileX) | 0;
-        var mtileY = (element[1] + sizeOfTileY) | 0;
+        if (element){
+            tileX = (element[0]) | 0;
+            tileY = (element[1]) | 0;
+            mtileX = (element[0] + sizeOfTileX) | 0;
+            mtileY = (element[1] + sizeOfTileY) | 0;
+        }
+        
 
         if ((x > tileX)
             && (x < mtileX)
             && (y > tileY) 
             && (y < mtileY))
         {
-           player1.dead();
+            // If player is touching a black tile, decrease life by 1 and reset position
+            player1.life -= 1;
+            player1.position.x = 0;
+            player1.position.y = 0;
+        }
+        
+        // If player have 0 live left, he died 
+        if (player1.life == 0)
+        {
+            player1.dead();
         }
     }
 

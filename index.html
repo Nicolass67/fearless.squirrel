@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <title>Fluffy Giggle</title>
     <style>
         body {
-            background: #000000; 
+            background: #000000;
         }
 
         #container {
-            margin : auto; 
+            margin: auto;
             border: 1px solid white;
             background: #000000;
         }
-        
+
         #player1 {
-                margin : auto; 
-                text-align: center;
+            margin: auto;
+            text-align: center;
         }
 
         .life {
-            color:white;
+            color: white;
         }
     </style>
 </head>
@@ -37,6 +38,7 @@
 <script src="js/OrbitControls.js"></script>
 <script src="js/THREEx.KeyboardState.js"></script>
 <script src="game/player.js"></script>
+<script src="game/ennemy.js"></script>
 <script src="game/graphic.js"></script>
 <script src="game/physic.js"></script>
 <script src="game/shoot.js"></script>
@@ -47,14 +49,17 @@
     var clock = new THREE.Clock();
     var player1,
         player2;
+
+    var ennemy1;
+
     var WIDTH = 600,
         HEIGHT = 400;
+
 
     init();
     animate();
 
-    function animate()
-    {
+    function animate() {
         requestAnimationFrame(animate);
         render();
         update();
@@ -63,16 +68,16 @@
         collisions();
     }
 
-    function render()
-    {
+    function render() {
         renderer.render(scene, camera);
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#container')
             .css('width', WIDTH)
             .css('height', HEIGHT)
-        ;
+            ;
     });
 </script>
+
 </html>
